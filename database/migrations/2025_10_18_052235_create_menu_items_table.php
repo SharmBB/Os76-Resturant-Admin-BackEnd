@@ -25,6 +25,7 @@ return new class extends Migration
             $table->timestamps();
 
             // Foreign keys
+            $table->foreignId('outlet_id')->constrained('outlets')->onDelete('cascade');
             $table->foreign('category_id')->references('id')->on('menu_categories')->onDelete('cascade');
             $table->foreign('subcategory_id')->references('id')->on('menu_subcategories')->onDelete('set null');
         });

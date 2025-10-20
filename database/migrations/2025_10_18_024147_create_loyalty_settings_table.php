@@ -23,9 +23,6 @@ return new class extends Migration
             $table->decimal('currency_value', 8, 2)->default(1.00); 
             $table->boolean('redeem_points_enabled')->default(false); 
             $table->timestamps();
-
-            //Relationship
-            $table->foreignId('outlet_id')->nullable()->constrained('outlets')->onDelete('cascade');
         });
     }
 

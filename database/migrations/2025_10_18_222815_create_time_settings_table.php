@@ -22,7 +22,8 @@ return new class extends Migration
 
             // Foreign key(days)
             $table->foreignId('time_slots_id')->constrained('time_slots')->onDelete('cascade');
-            
+            $table->foreignId('outlet_id')->constrained('outlets')->onDelete('cascade');
+
             $table->timestamps();
         });
     }

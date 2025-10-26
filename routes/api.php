@@ -62,8 +62,8 @@ Route::delete('/variants/{id}', [MenuVariantController::class, 'destroy']);
 // --------------------
 // 🚚 Order Items Routes
 // --------------------
-Route::get('/variants/test', function () {
-    return response()->json(['message' => 'Menu Variant API working ✅']);
+Route::get('/orderItems/test', function () {
+    return response()->json(['message' => 'Order Items API working ✅']);
 });
 Route::get('/orderItems', [OrderItemController::class, 'index']);
 Route::get('/orderItems/{id}', [OrderItemController::class, 'show']);

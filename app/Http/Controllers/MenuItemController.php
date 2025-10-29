@@ -12,6 +12,7 @@ class MenuItemController extends Controller
     {
         $validated = $request->validate([
             'name' => 'required|string|max:255',
+            'is_visible' => 'boolean | default:true',
             'category_id' => 'required|exists:menu_categories,id',
             'subcategory_id' => 'nullable|exists:menu_subcategories,id',
             'price' => 'required|numeric|min:0',
@@ -39,6 +40,7 @@ class MenuItemController extends Controller
 
         $validated = $request->validate([
             'name' => 'sometimes|string|max:255',
+            'is_visible' => 'boolean | default:true',
             'category_id' => 'sometimes|exists:menu_categories,id',
             'subcategory_id' => 'nullable|exists:menu_subcategories,id',
             'price' => 'sometimes|numeric|min:0',

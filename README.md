@@ -60,6 +60,32 @@ delete -> /categories/{id}
 </pre>
 -----------------------------------------------------------------------------------------------------------
 
+## Menu Subcategory Routes
+<pre>    
+get -> /subcategories
+get -> /subcategories/{id}
+                ♦ request -> Subcategory table id
+                
+post -> /subcategories
+                'name' => 'required|string|max:255|unique:menu_subcategories,name',
+                'category_id' => 'required|exists:menu_categories,id',
+                'description' => 'nullable|string',
+                'img' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+
+put -> /subcategories/{id}
+                 ♦ request -> Subcategory table id
+
+                'name' => 'required|string|max:255|unique:menu_subcategories,name',
+                'category_id' => 'required|exists:menu_categories,id',
+                'description' => 'nullable|string',
+                'img' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+                 
+delete -> /subcategories/{id}
+                 ♦ request -> Subcategory table id
+    
+</pre>
+-----------------------------------------------------------------------------------------------------------
+
 ## Menu Variant Routes
 <pre>    
 get -> /variants

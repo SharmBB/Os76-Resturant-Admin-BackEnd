@@ -129,7 +129,7 @@ class MenuSubcategoryController extends Controller
             ]);
 
         } catch (\Exception $e) {
-            return $this->errorResponse($e, "Failed to delete subcategory");
+            return $this->errorResponse($e, "errorResponse subcategory");
         }
     }
 

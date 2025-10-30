@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\MenuItemController;
 use App\Http\Controllers\MenuCategoryController;
+use App\Http\Controllers\MenuManagementListController;
 use App\Http\Controllers\MenuSubcategoryController;
 use App\Http\Controllers\MenuVariantController;
 use App\Http\Controllers\OrderItemController;
@@ -70,3 +71,15 @@ Route::get('/orderItems/{id}', [OrderItemController::class, 'show']);
 Route::post('/orderItems', [OrderItemController::class, 'store']);
 Route::put('/orderItems/{id}', [OrderItemController::class, 'update']);
 Route::delete('/orderItems/{id}', [OrderItemController::class, 'destroy']);
+
+// --------------------
+// 📃 Menu Management List Routes
+// --------------------
+Route::get('/menuList/test', function () {
+    return response()->json(['message' => 'Menu Management List API working ✅']);
+});
+Route::get('/menuLists', [MenuManagementListController::class, 'index']);
+Route::get('/menuLists/{id}', [MenuManagementListController::class, 'show']);
+Route::post('/menuLists', [MenuManagementListController::class, 'store']);
+Route::put('/menuLists/{id}', [MenuManagementListController::class, 'update']);
+Route::delete('/menuLists/{id}', [MenuManagementListController::class, 'destroy']);

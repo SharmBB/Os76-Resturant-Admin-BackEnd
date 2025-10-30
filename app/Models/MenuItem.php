@@ -20,7 +20,13 @@ class MenuItem extends Model
         'product_code',
         'description',
         'track_inventory_enabled',
+        'menu_list_id', // from MenuManagementList table
     ];
+
+    public function menuLists()
+    {
+        return $this->belongsToMany(MenuManagementList::class, 'menu_list_item');
+    }
 
     public function category()
     {

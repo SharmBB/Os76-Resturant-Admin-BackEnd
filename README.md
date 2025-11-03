@@ -15,6 +15,10 @@ post -> /menu-items
                 'product_code' => 'nullable|string|max:100',
                 'description' => 'nullable|string',
                 'track_inventory_enabled' => 'boolean',
+                // Inventory fields
+                'sku' => 'nullable|string|max:100',
+                'available_quantity' => 'nullable|numeric|min:0',
+                'allow_out_of_stock_sales' => 'nullable|boolean',
 
 put -> /menu-items/{id}
                  ♦ request -> menu_items table id
@@ -29,6 +33,10 @@ put -> /menu-items/{id}
                 'product_code' => 'nullable|string|max:100',
                 'description' => 'nullable|string',
                 'track_inventory_enabled' => 'boolean',
+                // Inventory fields
+                        'sku' => 'nullable|string|max:100',
+                        'available_quantity' => 'nullable|numeric|min:0',
+                        'allow_out_of_stock_sales' => 'nullable|boolean',
                  
 delete -> /menu-items/{id}
                  ♦ request -> menu_items table id
@@ -99,6 +107,10 @@ post -> /variants
                 'compare_at_price' => 'nullable|numeric|min:0',
                 'track_inventory_enabled' => 'required|boolean',
                 'variant_img' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+                // Inventory fields
+                'sku' => 'nullable|string|max:100',
+                'available_quantity' => 'nullable|numeric|min:0',
+                'allow_out_of_stock_sales' => 'nullable|boolean',
 
 put -> /variants/{id}
                  ♦ request -> variants table id
@@ -109,6 +121,10 @@ put -> /variants/{id}
                 'compare_at_price' => 'nullable|numeric|min:0',
                 'track_inventory_enabled' => 'required|boolean',
                 'variant_img' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+                // Inventory fields
+                'sku' => 'nullable|string|max:100',
+                'available_quantity' => 'nullable|numeric|min:0',
+                'allow_out_of_stock_sales' => 'nullable|boolean',
                  
 delete -> /variants/{id}
                  ♦ request -> variants table id

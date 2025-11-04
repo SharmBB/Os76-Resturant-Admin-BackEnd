@@ -39,7 +39,10 @@ class Outlet extends Model
         'updated_at' => 'datetime',
     ];
 
-    
+    public function inventories(){
+        return $this->hasMany(MenuItemOutletInventory::class);
+    }
+
     public function menuLists(){
         return $this->belongsToMany(MenuManagementList::class, 'menu_list_outlet');
     }

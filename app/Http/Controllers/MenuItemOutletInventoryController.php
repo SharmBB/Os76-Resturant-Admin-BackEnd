@@ -2,14 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\OrderItem;
-use Exception;
+use App\Models\MenuItemOutletInventory;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Validation\ValidationException;
 
-class OrderItemController extends Controller
+class MenuItemOutletInventoryController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -17,15 +16,15 @@ class OrderItemController extends Controller
     public function index()
     {
         try {
-            $orderItem = OrderItem::with('order')->get();
+            $inventories = MenuItemOutletInventory::with(['menuItem', 'variant', 'outlet'])->get();
 
             return response()->json([
                 'status' => 200,
-                'data' => $orderItem
+                'data' => $inventories
             ], Response::HTTP_OK);
-            
+
         } catch (\Exception $e) {
-            return $this->errorResponse($e, "An error occurred");
+             return $this->errorResponse($e, "An error occurred");
         }
     }
 
@@ -44,26 +43,29 @@ class OrderItemController extends Controller
     {
         try {
             $validated = $request->validate([
-                'item_name' => 'required|string|max:255',
-                'qty' => 'required|integer|min:1',
-                'price' => 'required|numeric|min:0',
-                'total_price' => 'required|numeric|min:0',
-                'order_id' => 'required|exists:orders,id',
+                'product_name' => 'required|string|max:255',
+                'sku' => 'nullable|string|max:255',
+                'available_quantity' => 'nullable|numeric|min:0',
+                'allow_out_of_stock_sales' => 'nullable|boolean',
+                'outlet_id' => 'nullable|exists:outlets,id',
             ]);
 
-            $orderItem = OrderItem::create($validated);
+            // Set default outlet_id if not provided
+            $validated['outlet_id'] = $validated['outlet_id'] ?? 1;
+
+            $inventory = MenuItemOutletInventory::create($validated);
 
             return response()->json([
                 'status' => 201,
-                'message' => 'Order Item created successfully',
-                'data' => $orderItem,
+                'message' => 'Product Item created successfully for inventory',
+                'data' => $inventory,
             ], Response::HTTP_CREATED);
 
         } catch (ValidationException $e) {
             return $this->validationErrorResponse($e);
 
         } catch (\Exception $e) {
-            return $this->errorResponse($e, "An error occurred While creating variant");
+            return $this->errorResponse($e, "An error occurred While creating Product Item for inventory");
         }
     }
 
@@ -73,18 +75,15 @@ class OrderItemController extends Controller
     public function show(string $id)
     {
         try {
-            $orderItem = OrderItem::with('order')->findOrFail($id);
+            $inventories = MenuItemOutletInventory::with(['menuItem', 'variant', 'outlet'])->findOrFail($id);
 
             return response()->json([
                 'status' => 200,
-                'data' => $orderItem,
+                'data' => $inventories
             ], Response::HTTP_OK);
 
-        } catch (ModelNotFoundException $e) {
-            return $this->NotFoundResponse($e, " Order Item Not Found");
-
         } catch (\Exception $e) {
-            return $this->errorResponse($e, "An error occurred While showing order item");
+             return $this->errorResponse($e, "An error occurred");
         }
     }
 
@@ -103,29 +102,32 @@ class OrderItemController extends Controller
     {
         try {
 
-            $orderItem = OrderItem::findOrFail($id);
+            $inventory = MenuItemOutletInventory::with(['menuItem', 'variant', 'outlet'])->findOrFail($id);
 
             $validated = $request->validate([
-                'item_name' => 'required|string|max:255',
-                'qty' => 'required|integer|min:1',
-                'price' => 'required|numeric|min:0',
-                'total_price' => 'required|numeric|min:0',
-                'order_id' => 'required|exists:orders,id',
+                'product_name' => 'required|string|max:255',
+                'sku' => 'nullable|string|max:255',
+                'available_quantity' => 'nullable|numeric|min:0',
+                'allow_out_of_stock_sales' => 'nullable|boolean',
+                'outlet_id' => 'nullable|exists:outlets,id',
             ]);
 
-            $orderItem->update($validated);
+            // Set default outlet_id if not provided
+            $validated['outlet_id'] = $validated['outlet_id'] ?? 1;
+
+            $inventory->update($validated);
 
             return response()->json([
-                'status' => 200,
-                'message' => 'Order Item updated successfully',
-                'data' => $orderItem,
-            ], Response::HTTP_OK);
+                'status' => 201,
+                'message' => 'Product Item Updated successfully for inventory',
+                'data' => $inventory,
+            ], Response::HTTP_CREATED);
 
         } catch (ValidationException $e) {
             return $this->validationErrorResponse($e);
 
         } catch (\Exception $e) {
-            return $this->errorResponse($e, "An error occurred While updating variant");
+            return $this->errorResponse($e, "An error occurred While updating Product Item for inventory");
         }
     }
 
@@ -134,20 +136,20 @@ class OrderItemController extends Controller
      */
     public function destroy(string $id)
     {
-        try {
-            $orderItem = OrderItem::findOrFail($id);
-            $orderItem->delete();
+         try {
+            $inventory = MenuItemOutletInventory::findOrFail($id);
+            $inventory->delete();
 
             return response()->json([
                 'status' => 200,
-                'message' => 'Order Item deleted successfully',
+                'message' => 'Product Item deleted successfully',
             ], Response::HTTP_OK);
 
         } catch (ModelNotFoundException $e) {
-            return $this->NotFoundResponse($e, " Order Item Not Found");
+            return $this->NotFoundResponse($e, " Product Item Not Found");
 
         } catch (\Exception $e) {
-            return $this->errorResponse($e, " Failed to delete Order Item");
+            return $this->errorResponse($e, " Failed to delete Product Item");
         }
     }
 

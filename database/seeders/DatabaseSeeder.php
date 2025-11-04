@@ -29,6 +29,7 @@ class DatabaseSeeder extends Seeder
             MenuCategorySeeder::class,
             MenuItemSeeder::class,
             MenuManagementListSeeder::class,
+            UnitMeasurementSeeder::class,
         ]);
     }
 }

@@ -5,6 +5,78 @@
 
 -------------------------------------------------------------------------------------------------------------------------------------
 
+## Inventory Consumption List Routes
+<pre>    
+get -> /inventory-consumptions
+get -> /inventory-consumptions/{id}
+                ♦ request -> MenuItem_Outlet_Inventory table id
+                
+post -> /inventory-consumptions
+                'consumed_quantity' => 'required|numeric|min:0',
+                'remark' => 'nullable|string|max:255',
+                'menu_item_outlet_inventory_id' => 'required|exists:menu_item_outlet_inventories,id',
+                'outlet_id' => 'required|exists:outlets,id',
+
+// // show products items by outlet id
+post -> /inventory-consumptions/showByOutlet
+                'outlet_id' => 'required|exists:outlets,id',
+
+
+    
+</pre>
+
+-------------------------------------------------------------------------------------------------------------------------------------
+
+## Inventory Management List Routes
+<pre>    
+get -> /inventories
+get -> /inventories/{id}
+                ♦ request -> MenuItem_Outlet_Inventory table id
+                
+post -> /inventories
+                'product_name' => 'required|string|max:255',
+                'sku' => 'nullable|string|max:255',
+                'available_quantity' => 'nullable|numeric|min:0',
+                'allow_out_of_stock_sales' => 'nullable|boolean',
+                'outlet_id' => 'nullable|exists:outlets,id',
+
+put -> /inventories/{id}
+                ♦ request -> MenuItem_Outlet_Inventory table id
+
+                'product_name' => 'required|string|max:255',
+                'sku' => 'nullable|string|max:255',
+                'available_quantity' => 'nullable|numeric|min:0',
+                'allow_out_of_stock_sales' => 'nullable|boolean',
+                'outlet_id' => 'nullable|exists:outlets,id',
+
+delete -> /inventories/{id}
+                 ♦ request -> MenuItem_Outlet_Inventory table id
+    
+</pre>
+
+-------------------------------------------------------------------------------------------------------------------------------------
+
+## Unit Measurements List Routes
+<pre>    
+get -> /unit-measurements
+get -> /unit-measurements/{id}
+                ♦ request -> unit-measurements table id
+                
+post -> /unit-measurements
+                'measurement_name' => 'required|string|max:255'
+
+put -> /unit-measurements/{id}
+                 ♦ request -> unit-measurements table id
+
+                 'measurement_name' => 'required|string|max:255'
+               
+delete -> /unit-measurements/{id}
+                 ♦ request -> unit-measurements table id
+    
+</pre>
+
+-------------------------------------------------------------------------------------------------------------------------------------
+
 ## Menu Management List Routes
 <pre>    
 get -> /menuLists

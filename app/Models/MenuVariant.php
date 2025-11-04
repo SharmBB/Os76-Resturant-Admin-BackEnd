@@ -21,6 +21,10 @@ class MenuVariant extends Model
         'track_inventory_enabled' => 'boolean',
     ];
 
+    public function inventories(){
+        return $this->hasMany(MenuItemOutletInventory::class, 'menu_variant_id');
+    }
+    
     public function menuItem(){
         return $this->belongsTo(MenuItem::class);
     }

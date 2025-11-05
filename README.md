@@ -35,19 +35,23 @@ get -> /inventories/{id}
                 
 post -> /inventories
                 'product_name' => 'required|string|max:255',
+                'product_img' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+                'outlet_id' => 'required|exists:outlets,id',
                 'sku' => 'nullable|string|max:255',
                 'available_quantity' => 'nullable|numeric|min:0',
                 'allow_out_of_stock_sales' => 'nullable|boolean',
-                'outlet_id' => 'nullable|exists:outlets,id',
+                'outlet_id' => 'required|exists:outlets,id',
 
 put -> /inventories/{id}
                 ♦ request -> MenuItem_Outlet_Inventory table id
 
                 'product_name' => 'required|string|max:255',
+                'product_img' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+                'outlet_id' => 'required|exists:outlets,id',
                 'sku' => 'nullable|string|max:255',
                 'available_quantity' => 'nullable|numeric|min:0',
                 'allow_out_of_stock_sales' => 'nullable|boolean',
-                'outlet_id' => 'nullable|exists:outlets,id',
+                'outlet_id' => 'required|exists:outlets,id',
 
 delete -> /inventories/{id}
                  ♦ request -> MenuItem_Outlet_Inventory table id

@@ -44,14 +44,20 @@ class MenuItemOutletInventoryController extends Controller
         try {
             $validated = $request->validate([
                 'product_name' => 'required|string|max:255',
+                'product_img' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
                 'sku' => 'nullable|string|max:255',
                 'available_quantity' => 'nullable|numeric|min:0',
                 'allow_out_of_stock_sales' => 'nullable|boolean',
-                'outlet_id' => 'nullable|exists:outlets,id',
+                'outlet_id' => 'required|exists:outlets,id',
             ]);
 
-            // Set default outlet_id if not provided
-            $validated['outlet_id'] = $validated['outlet_id'] ?? 1;
+            // Handle image upload
+            if ($request->hasFile('product_img')) {
+                $file = $request->file('product_img');
+                $filename = time() . '_' . $file->getClientOriginalName();
+                $file->move(public_path('uploads/inventry'), $filename);
+                $validated['product_img'] = 'uploads/inventry/' . $filename;
+            }
 
             $inventory = MenuItemOutletInventory::create($validated);
 
@@ -106,14 +112,20 @@ class MenuItemOutletInventoryController extends Controller
 
             $validated = $request->validate([
                 'product_name' => 'required|string|max:255',
+                'product_img' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
                 'sku' => 'nullable|string|max:255',
                 'available_quantity' => 'nullable|numeric|min:0',
                 'allow_out_of_stock_sales' => 'nullable|boolean',
-                'outlet_id' => 'nullable|exists:outlets,id',
+                'outlet_id' => 'required|exists:outlets,id',
             ]);
 
-            // Set default outlet_id if not provided
-            $validated['outlet_id'] = $validated['outlet_id'] ?? 1;
+            // Handle image upload
+            if ($request->hasFile('product_img')) {
+                $file = $request->file('product_img');
+                $filename = time() . '_' . $file->getClientOriginalName();
+                $file->move(public_path('uploads/inventry'), $filename);
+                $validated['product_img'] = 'uploads/inventry/' . $filename;
+            }
 
             $inventory->update($validated);
 

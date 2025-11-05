@@ -12,7 +12,6 @@ class MenuVariant extends Model
         'price',
         'compare_at_price',
         'track_inventory_enabled',
-        'variant_img',
     ];
 
     protected $casts = [

@@ -9,6 +9,7 @@ class MenuItemOutletInventory extends Model
 
     protected $fillable = [
         'product_name',
+        'product_img',
         'sku',
         'available_quantity',
         'allow_out_of_stock_sales',

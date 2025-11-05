@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('menu_item_outlet_inventories', function (Blueprint $table) {
             $table->id();
             $table->string('product_name');
+            $table->string('product_img')->nullable();
             $table->string('sku')->nullable(); // Stock Keeping Unit (Thumbs-Up, 200ml => SKU == TUMS-200ML)
             $table->integer('available_quantity')->default(0);
             $table->boolean('allow_out_of_stock_sales')->default(false);

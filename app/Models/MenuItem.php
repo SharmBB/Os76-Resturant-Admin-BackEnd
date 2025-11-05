@@ -14,6 +14,7 @@ class MenuItem extends Model
     protected $fillable = [
         'name',
         'is_visible',
+        'menuItem_img',
         'category_id',
         'subcategory_id',
         'price',

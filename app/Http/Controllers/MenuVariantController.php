@@ -49,21 +49,22 @@ class MenuVariantController extends Controller
                 'price' => 'required|numeric|min:0',
                 'compare_at_price' => 'nullable|numeric|min:0',
                 'track_inventory_enabled' => 'required|boolean',
-                'variant_img' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+                // 'variant_img' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
                 // Inventory fields
                 'sku' => 'nullable|string|max:100',
                 'available_quantity' => 'nullable|numeric|min:0',
                 'allow_out_of_stock_sales' => 'nullable|boolean',
+
                 'outlet_id' => 'required|exists:outlets,id',
             ]);
 
-            // Handle image upload
-            if ($request->hasFile('variant_img')) {
-                $file = $request->file('variant_img');
-                $filename = time() . '_' . $file->getClientOriginalName();
-                $file->move(public_path('uploads/variant'), $filename);
-                $validated['variant_img'] = 'uploads/variant/' . $filename;
-            }
+            // // Handle image upload
+            // if ($request->hasFile('variant_img')) {
+            //     $file = $request->file('variant_img');
+            //     $filename = time() . '_' . $file->getClientOriginalName();
+            //     $file->move(public_path('uploads/variant'), $filename);
+            //     $validated['variant_img'] = 'uploads/variant/' . $filename;
+            // }
 
             $variant = MenuVariant::create($validated);
 
@@ -75,6 +76,7 @@ class MenuVariantController extends Controller
 
                 $inventory = MenuItemOutletInventory::create([
                     'product_name' => $variant->variant_name,
+                    // 'product_img' => $validated['variant_img'] ?? null,
                     'sku' => $validated['sku'] ?? null,
                     'available_quantity' => $validated['available_quantity'] ?? 0,
                     'allow_out_of_stock_sales' => $validated['allow_out_of_stock_sales'] ?? false,
@@ -91,6 +93,9 @@ class MenuVariantController extends Controller
                     'variant' => $variant->fresh()->load('inventories'),
                 ],
             ], Response::HTTP_CREATED);
+            
+        } catch (ModelNotFoundException $e) {
+            return $this->NotFoundResponse($e, " variant model variable Not Found");
 
         } catch (ValidationException $e){
             return $this->validationErrorResponse($e);
@@ -142,7 +147,7 @@ class MenuVariantController extends Controller
                 'price' => 'required|numeric|min:0',
                 'compare_at_price' => 'nullable|numeric|min:0',
                 'track_inventory_enabled' => 'required|boolean',
-                'variant_img' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+                // 'variant_img' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
                 // Inventory fields
                 'sku' => 'nullable|string|max:100',
                 'available_quantity' => 'nullable|numeric|min:0',
@@ -172,6 +177,7 @@ class MenuVariantController extends Controller
                     // Update existing inventory
                     $inventory->update([
                         'product_name' => $variant->variant_name,
+                        // 'product_img' => $validated['variant_img'] ?? null,
                         'sku' => $validated['sku'] ?? $inventory->sku,
                         'available_quantity' => $validated['available_quantity'] ?? $inventory->available_quantity,
                         'allow_out_of_stock_sales' => $validated['allow_out_of_stock_sales'] ?? $inventory->allow_out_of_stock_sales,
@@ -180,6 +186,7 @@ class MenuVariantController extends Controller
                     // create if not found
                     MenuItemOutletInventory::create([
                         'product_name' => $variant->variant_name,
+                        // 'product_img' => $validated['variant_img'] ?? null,
                         'sku' => $validated['sku'] ?? null,
                         'available_quantity' => $validated['available_quantity'] ?? 0,
                         'allow_out_of_stock_sales' => $validated['allow_out_of_stock_sales'] ?? false,

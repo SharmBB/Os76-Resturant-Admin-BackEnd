@@ -17,8 +17,7 @@ return new class extends Migration
             $table->string('variant_name');
             $table->decimal('price', 8, 2);
             $table->decimal('compare_at_price', 8, 2)->nullable();
-            $table->boolean('track_inventory_enabled')->default(false);
-            $table->string('variant_img')->nullable(); 
+            $table->boolean('track_inventory_enabled')->default(false); 
             $table->timestamps();
 
             // Foreign key constraint

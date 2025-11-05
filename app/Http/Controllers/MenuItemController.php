@@ -26,6 +26,7 @@ class MenuItemController extends Controller
             'product_code' => 'nullable|string|max:100',
             'description' => 'nullable|string',
             'track_inventory_enabled' => 'boolean',
+            'menuItem_img' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
             // Inventory fields
             'sku' => 'nullable|string|max:100',
             'available_quantity' => 'nullable|numeric|min:0',
@@ -35,6 +36,14 @@ class MenuItemController extends Controller
         
         $menuItem = MenuItem::create($validated);
         
+        // Handle image upload
+            if ($request->hasFile('menuItem_img')) {
+                $file = $request->file('menuItem_img');
+                $filename = time() . '_' . $file->getClientOriginalName();
+                $file->move(public_path('uploads/menuItem'), $filename);
+                $validated['menuItem_img'] = 'uploads/menuItem/' . $filename;
+            }
+            
         // Initialize inventory as null
         $inventory = null;
 
@@ -42,6 +51,7 @@ class MenuItemController extends Controller
             
             $inventory = MenuItemOutletInventory::create([
                 'product_name' => $menuItem->name,
+                'product_img' => $validated['menuItem_img'] ?? null,
                 'sku' => $validated['sku'] ?? null,
                 'available_quantity' => $validated['available_quantity'] ?? 0,
                 'allow_out_of_stock_sales' => $validated['allow_out_of_stock_sales'] ?? false,
@@ -86,6 +96,7 @@ class MenuItemController extends Controller
                 'product_code' => 'nullable|string|max:100',
                 'description' => 'nullable|string',
                 'track_inventory_enabled' => 'sometimes|boolean',
+                'menuItem_img' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
                 // Inventory fields
                 'sku' => 'nullable|string|max:100',
                 'available_quantity' => 'nullable|numeric|min:0',
@@ -93,6 +104,14 @@ class MenuItemController extends Controller
                 'menu_variant_id' => 'nullable|exists:menu_variants,id',
                 'outlet_id' => 'required|exists:outlets,id',
             ]);
+
+            // Handle image upload
+            if ($request->hasFile('menuItem_img')) {
+                $file = $request->file('menuItem_img');
+                $filename = time() . '_' . $file->getClientOriginalName();
+                $file->move(public_path('uploads/menuItem'), $filename);
+                $validated['menuItem_img'] = 'uploads/menuItem/' . $filename;
+            }
 
             $menuItem->update($validated);
 
@@ -108,6 +127,7 @@ class MenuItemController extends Controller
                     // Update existing inventory
                     $inventory->update([
                         'product_name' => $menuItem->name,
+                        'product_img' => $validated['variant_img'] ?? null,
                         'sku' => $validated['sku'] ?? $inventory->sku,
                         'available_quantity' => $validated['available_quantity'] ?? $inventory->available_quantity,
                         'allow_out_of_stock_sales' => $validated['allow_out_of_stock_sales'] ?? $inventory->allow_out_of_stock_sales,
@@ -116,6 +136,7 @@ class MenuItemController extends Controller
                     // Create inventory if not found
                     $inventory = MenuItemOutletInventory::create([
                         'product_name' => $menuItem->name,
+                        'product_img' => $validated['variant_img'] ?? null,
                         'sku' => $validated['sku'] ?? null,
                         'available_quantity' => $validated['available_quantity'] ?? 0,
                         'allow_out_of_stock_sales' => $validated['allow_out_of_stock_sales'] ?? false,

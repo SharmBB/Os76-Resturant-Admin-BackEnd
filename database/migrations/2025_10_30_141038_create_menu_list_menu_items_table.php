@@ -11,17 +11,15 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('menu_variants', function (Blueprint $table) {
+        Schema::create('menu_list_menu_items', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('menu_item_id'); 
-            $table->string('variant_name');
-            $table->decimal('price', 8, 2);
-            $table->decimal('compare_at_price', 8, 2)->nullable();
-            $table->boolean('track_inventory_enabled')->default(false); 
-            $table->timestamps();
+            $table->unsignedBigInteger('menu_management_list_id');
+            $table->unsignedBigInteger('menu_item_id');
 
-            // Foreign key constraint
+            $table->foreign('menu_management_list_id')->references('id')->on('menu_management_lists')->onDelete('cascade');
             $table->foreign('menu_item_id')->references('id')->on('menu_items')->onDelete('cascade');
+
+            $table->timestamps();
         });
     }
 
@@ -30,6 +28,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('menu_variants');
+        Schema::dropIfExists('menu_list_menu_items');
     }
 };

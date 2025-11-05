@@ -2,14 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\OrderItem;
-use Exception;
+use App\Models\UnitMeasurement;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Validation\ValidationException;
 
-class OrderItemController extends Controller
+class UnitMeasurementController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -17,13 +16,13 @@ class OrderItemController extends Controller
     public function index()
     {
         try {
-            $orderItem = OrderItem::with('order')->get();
+            $measurements = UnitMeasurement::all();
 
             return response()->json([
                 'status' => 200,
-                'data' => $orderItem
+                'data' => $measurements
             ], Response::HTTP_OK);
-            
+
         } catch (\Exception $e) {
             return $this->errorResponse($e, "An error occurred");
         }
@@ -44,26 +43,22 @@ class OrderItemController extends Controller
     {
         try {
             $validated = $request->validate([
-                'item_name' => 'required|string|max:255',
-                'qty' => 'required|integer|min:1',
-                'price' => 'required|numeric|min:0',
-                'total_price' => 'required|numeric|min:0',
-                'order_id' => 'required|exists:orders,id',
+                'measurement_name' => 'required|string|max:255',
             ]);
 
-            $orderItem = OrderItem::create($validated);
+            $measurement = UnitMeasurement::create($validated);
 
             return response()->json([
                 'status' => 201,
-                'message' => 'Order Item created successfully',
-                'data' => $orderItem,
+                'message' => 'Unit Measurement created successfully',
+                'data' => $measurement,
             ], Response::HTTP_CREATED);
 
         } catch (ValidationException $e) {
             return $this->validationErrorResponse($e);
 
         } catch (\Exception $e) {
-            return $this->errorResponse($e, "An error occurred While creating variant");
+            return $this->errorResponse($e, "An error occurred While creating measurement");
         }
     }
 
@@ -73,18 +68,18 @@ class OrderItemController extends Controller
     public function show(string $id)
     {
         try {
-            $orderItem = OrderItem::with('order')->findOrFail($id);
+            $measurement = UnitMeasurement::findOrFail($id);
 
             return response()->json([
                 'status' => 200,
-                'data' => $orderItem,
+                'data' => $measurement,
             ], Response::HTTP_OK);
 
         } catch (ModelNotFoundException $e) {
-            return $this->NotFoundResponse($e, " Order Item Not Found");
+            return $this->NotFoundResponse($e, " measurement Not Found");
 
         } catch (\Exception $e) {
-            return $this->errorResponse($e, "An error occurred While showing order item");
+            return $this->errorResponse($e, "An error occurred While showing measurement");
         }
     }
 
@@ -103,29 +98,25 @@ class OrderItemController extends Controller
     {
         try {
 
-            $orderItem = OrderItem::findOrFail($id);
+            $measurement = UnitMeasurement::findOrFail($id);
 
             $validated = $request->validate([
-                'item_name' => 'required|string|max:255',
-                'qty' => 'required|integer|min:1',
-                'price' => 'required|numeric|min:0',
-                'total_price' => 'required|numeric|min:0',
-                'order_id' => 'required|exists:orders,id',
+                'measurement_name' => 'required|string|max:255',
             ]);
 
-            $orderItem->update($validated);
+            $measurement->update($validated);
 
             return response()->json([
                 'status' => 200,
-                'message' => 'Order Item updated successfully',
-                'data' => $orderItem,
+                'message' => 'Unit Measurement updated successfully',
+                'data' => $measurement,
             ], Response::HTTP_OK);
 
         } catch (ValidationException $e) {
             return $this->validationErrorResponse($e);
-
+            
         } catch (\Exception $e) {
-            return $this->errorResponse($e, "An error occurred While updating variant");
+            return $this->errorResponse($e, "An error occurred While creating measurement");
         }
     }
 
@@ -135,20 +126,20 @@ class OrderItemController extends Controller
     public function destroy(string $id)
     {
         try {
-            $orderItem = OrderItem::findOrFail($id);
-            $orderItem->delete();
+            $measurement = UnitMeasurement::findOrFail($id);
+            $measurement->delete();
 
             return response()->json([
                 'status' => 200,
-                'message' => 'Order Item deleted successfully',
+                'message' => 'measurement deleted successfully',
             ], Response::HTTP_OK);
 
         } catch (ModelNotFoundException $e) {
-            return $this->NotFoundResponse($e, " Order Item Not Found");
+            return $this->NotFoundResponse($e, " measurement Not Found");
 
         } catch (\Exception $e) {
-            return $this->errorResponse($e, " Failed to delete Order Item");
-        }
+            return $this->errorResponse($e, " Failed to delete measurement");
+        }  
     }
 
     // reusable private function for response

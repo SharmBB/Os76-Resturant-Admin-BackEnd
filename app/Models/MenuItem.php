@@ -9,9 +9,12 @@ class MenuItem extends Model
 {
     use HasFactory;
 
+    protected $table = 'menu_items';
+
     protected $fillable = [
         'name',
         'is_visible',
+        'menuItem_img',
         'category_id',
         'subcategory_id',
         'price',
@@ -20,7 +23,17 @@ class MenuItem extends Model
         'product_code',
         'description',
         'track_inventory_enabled',
+        'menu_list_id', // from MenuManagementList table
     ];
+
+    public function inventories(){
+        return $this->hasMany(MenuItemOutletInventory::class);
+    }
+
+    public function menuLists()
+    {
+        return $this->belongsToMany(MenuManagementList::class, 'menu_list_item');
+    }
 
     public function category()
     {

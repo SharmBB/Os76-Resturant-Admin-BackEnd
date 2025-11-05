@@ -1,11 +1,16 @@
 <?php
 
+use App\Http\Controllers\InventoryConsumptionController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\MenuItemController;
 use App\Http\Controllers\MenuCategoryController;
+use App\Http\Controllers\MenuItemOutletInventoryController;
+use App\Http\Controllers\MenuManagementListController;
 use App\Http\Controllers\MenuSubcategoryController;
 use App\Http\Controllers\MenuVariantController;
 use App\Http\Controllers\OrderItemController;
+use App\Http\Controllers\UnitMeasurementController;
+use App\Models\InventoryConsumption;
 
 // --------------------
 // ✅ Test Route
@@ -70,3 +75,52 @@ Route::get('/orderItems/{id}', [OrderItemController::class, 'show']);
 Route::post('/orderItems', [OrderItemController::class, 'store']);
 Route::put('/orderItems/{id}', [OrderItemController::class, 'update']);
 Route::delete('/orderItems/{id}', [OrderItemController::class, 'destroy']);
+
+// --------------------
+// 📃 Menu Management List Routes
+// --------------------
+Route::get('/menuList/test', function () {
+    return response()->json(['message' => 'Menu Management List API working ✅']);
+});
+Route::get('/menuLists', [MenuManagementListController::class, 'index']);
+Route::get('/menuLists/{id}', [MenuManagementListController::class, 'show']);
+Route::post('/menuLists', [MenuManagementListController::class, 'store']);
+Route::put('/menuLists/{id}', [MenuManagementListController::class, 'update']);
+Route::delete('/menuLists/{id}', [MenuManagementListController::class, 'destroy']);
+
+// --------------------
+// 📦 Unit Measurement List Routes
+// --------------------
+Route::get('/menuList/test', function () {
+    return response()->json(['message' => 'Unit Measurement List API working ✅']);
+});
+Route::get('/unit-measurements', [UnitMeasurementController::class, 'index']);
+Route::get('/unit-measurements/{id}', [UnitMeasurementController::class, 'show']);
+Route::post('/unit-measurements', [UnitMeasurementController::class, 'store']);
+Route::put('/unit-measurements/{id}', [UnitMeasurementController::class, 'update']);
+Route::delete('/unit-measurements/{id}', [UnitMeasurementController::class, 'destroy']);
+
+
+// --------------------
+// 📝 Inventory Management List Routes
+// --------------------
+Route::get('/inventories/test', function () {
+    return response()->json(['message' => 'inventories List API working ✅']);
+});
+Route::get('/inventories', [MenuItemOutletInventoryController::class, 'index']);
+Route::get('/inventories/{id}', [MenuItemOutletInventoryController::class, 'show']);
+Route::post('/inventories', [MenuItemOutletInventoryController::class, 'store']);
+Route::put('/inventories/{id}', [MenuItemOutletInventoryController::class, 'update']);
+Route::delete('/inventories/{id}', [MenuItemOutletInventoryController::class, 'destroy']);
+
+// --------------------
+// 📝 Inventory Consumption List Routes
+// --------------------
+Route::get('/inventory-consumptions/test', function () {
+    return response()->json(['message' => 'consumptions List API working ✅']);
+});
+Route::get('/inventory-consumptions', [InventoryConsumptionController::class, 'index']);
+Route::get('/inventory-consumptions/{id}', [InventoryConsumptionController::class, 'show']);
+Route::post('/inventory-consumptions', [InventoryConsumptionController::class, 'store']);
+// route to get consumption by outlet
+Route::post('/inventories-consumptions/showByOutlet', [InventoryConsumptionController::class, 'showByOutlet']);

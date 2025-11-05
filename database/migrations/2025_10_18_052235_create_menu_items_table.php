@@ -15,8 +15,12 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->boolean('is_visible')->default(true);
+            $table->string('menuItem_img')->nullable();
+
             $table->unsignedBigInteger('category_id');
             $table->unsignedBigInteger('subcategory_id')->nullable();
+            $table->unsignedBigInteger('menu_list_id')->nullable(); 
+
             $table->decimal('price', 8, 2);
             $table->decimal('compare_at_price', 8, 2)->nullable();
             $table->enum('type', ['Veg', 'Non_veg']);
@@ -28,6 +32,7 @@ return new class extends Migration
             // Foreign keys
             $table->foreign('category_id')->references('id')->on('menu_categories')->onDelete('cascade');
             $table->foreign('subcategory_id')->references('id')->on('menu_subcategories')->onDelete('set null');
+            $table->foreign('menu_list_id')->references('id')->on('menu_management_lists')->onDelete('cascade');
         });
     }
 

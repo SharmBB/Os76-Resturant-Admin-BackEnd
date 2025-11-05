@@ -7,6 +7,7 @@ get -> /menu-items/{id}
 post -> /menu-items
                 'name' => 'required|string|max:255',
                 'is_visible' => 'boolean | default:true',
+                'menuItem_img' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
                 'category_id' => 'required|exists:menu_categories,id',
                 'subcategory_id' => 'nullable|exists:menu_subcategories,id',
                 'price' => 'required|numeric|min:0',
@@ -20,11 +21,14 @@ post -> /menu-items
                 'available_quantity' => 'nullable|numeric|min:0',
                 'allow_out_of_stock_sales' => 'nullable|boolean',
 
+                'outlet_id' => 'required|exists:outlets,id',
+
 put -> /menu-items/{id}
                  ♦ request -> menu_items table id
 
                 'name' => 'required|string|max:255',
                 'is_visible' => 'boolean | default:true',
+                'menuItem_img' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
                 'category_id' => 'required|exists:menu_categories,id',
                 'subcategory_id' => 'nullable|exists:menu_subcategories,id',
                 'price' => 'required|numeric|min:0',
@@ -34,9 +38,11 @@ put -> /menu-items/{id}
                 'description' => 'nullable|string',
                 'track_inventory_enabled' => 'boolean',
                 // Inventory fields
-                        'sku' => 'nullable|string|max:100',
-                        'available_quantity' => 'nullable|numeric|min:0',
-                        'allow_out_of_stock_sales' => 'nullable|boolean',
+                'sku' => 'nullable|string|max:100',
+                'available_quantity' => 'nullable|numeric|min:0',
+                'allow_out_of_stock_sales' => 'nullable|boolean',
+
+                'outlet_id' => 'required|exists:outlets,id',
                  
 delete -> /menu-items/{id}
                  ♦ request -> menu_items table id
@@ -106,11 +112,12 @@ post -> /variants
                 'price' => 'required|numeric|min:0',
                 'compare_at_price' => 'nullable|numeric|min:0',
                 'track_inventory_enabled' => 'required|boolean',
-                'variant_img' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
                 // Inventory fields
                 'sku' => 'nullable|string|max:100',
                 'available_quantity' => 'nullable|numeric|min:0',
                 'allow_out_of_stock_sales' => 'nullable|boolean',
+
+                'outlet_id' => 'required|exists:outlets,id',
 
 put -> /variants/{id}
                  ♦ request -> variants table id
@@ -120,11 +127,12 @@ put -> /variants/{id}
                 'price' => 'required|numeric|min:0',
                 'compare_at_price' => 'nullable|numeric|min:0',
                 'track_inventory_enabled' => 'required|boolean',
-                'variant_img' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
                 // Inventory fields
                 'sku' => 'nullable|string|max:100',
                 'available_quantity' => 'nullable|numeric|min:0',
                 'allow_out_of_stock_sales' => 'nullable|boolean',
+    
+                'outlet_id' => 'required|exists:outlets,id',
                  
 delete -> /variants/{id}
                  ♦ request -> variants table id

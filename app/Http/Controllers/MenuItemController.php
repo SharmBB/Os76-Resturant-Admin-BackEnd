@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\MenuItem;
 use App\Models\MenuItemOutletInventory;
+use App\Models\MenuManagementList;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -27,6 +28,7 @@ class MenuItemController extends Controller
             'description' => 'nullable|string',
             'track_inventory_enabled' => 'boolean',
             'menuItem_img' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'menu_list_id' => 'required|exists:menu_management_lists,id',
             // Inventory fields
             'sku' => 'nullable|string|max:100',
             'available_quantity' => 'nullable|numeric|min:0',
@@ -35,6 +37,9 @@ class MenuItemController extends Controller
         ]);
         
         $menuItem = MenuItem::create($validated);
+
+        // Attach menu item to menu list (pivot table => menu_list_menu_items)
+        $menuItem->menuLists()->attach($validated['menu_list_id']);
         
         // Handle image upload
             if ($request->hasFile('menuItem_img')) {
@@ -97,6 +102,7 @@ class MenuItemController extends Controller
                 'description' => 'nullable|string',
                 'track_inventory_enabled' => 'sometimes|boolean',
                 'menuItem_img' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+                'menu_list_id' => 'required|exists:menu_management_lists,id',
                 // Inventory fields
                 'sku' => 'nullable|string|max:100',
                 'available_quantity' => 'nullable|numeric|min:0',
@@ -114,6 +120,16 @@ class MenuItemController extends Controller
             }
 
             $menuItem->update($validated);
+
+            // update pivot table (menu_list_menu_items)
+            $menuItem->menuLists()->sync([$validated['menu_list_id']]);
+            
+            // Update menu list => outlets pivot
+            $menuList = MenuManagementList::find($validated['menu_list_id']);
+
+            if ($menuList && !empty($validated['outlet_id'])) {
+                $menuList->outlets()->sync([$validated['outlet_id']]);
+            }
 
             $inventory = null;
 

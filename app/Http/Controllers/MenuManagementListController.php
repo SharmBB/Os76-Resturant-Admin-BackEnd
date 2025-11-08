@@ -17,8 +17,8 @@ class MenuManagementListController extends Controller
     public function index()
     {
         try {
-            // GET all menu lists with items
-            $menuList = MenuManagementList::with(['menuItems'])->get();
+            // GET all menu lists with items and outlets
+            $menuList = MenuManagementList::with(['menuItems', 'outlets'])->get();
              
             return response()->json([
                 'status' => 200,
@@ -54,7 +54,7 @@ class MenuManagementListController extends Controller
             ]);
 
             // loads the related data immediately after creation
-            $menuList->load(['menuItems']);
+            $menuList->load(['menuItems', 'outlets']);
 
             return response()->json([
                 'status' => 201,
@@ -76,7 +76,7 @@ class MenuManagementListController extends Controller
     public function show(string $id)
     {
         try {
-            $menuList = MenuManagementList::with(['menuItems'])->findOrFail($id);
+            $menuList = MenuManagementList::with(['menuItems','outlets'])->findOrFail($id);
 
             return response()->json([
                 'status' => 200,
@@ -113,11 +113,15 @@ class MenuManagementListController extends Controller
             'name' => $validated['name'],
         ]);
 
-        $menuList->load(['menuItems']);
+        // Sync relationships (this updates pivot tables)
+        $menuList->menuItems()->sync($validated['menu_item_ids']);
+        $menuList->outlets()->sync($validated['outlet_ids']);
+
+        $menuList->load(['menuItems', 'outlets']);
 
         return response()->json([
             'status' => 200,
-            'message' => 'Menu List updated successfully',
+            'message' => 'Menu List updated successfully with menu items and outlets',
             'data' => $menuList,
         ], Response::HTTP_OK);
 

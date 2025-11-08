@@ -46,7 +46,7 @@ class MenuVariantController extends Controller
             $validated = $request->validate([
                 'menu_item_id' => 'required|exists:menu_items,id',
                 'variant_name' => 'required|string|max:255',
-                'price' => 'required|numeric|min:0',
+                'price' => 'nullable|numeric|min:0',
                 'compare_at_price' => 'nullable|numeric|min:0',
                 'track_inventory_enabled' => 'required|boolean',
                 // 'variant_img' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
@@ -144,7 +144,7 @@ class MenuVariantController extends Controller
             $validated = $request->validate([
                 'menu_item_id' => 'required|exists:menu_items,id',
                 'variant_name' => 'required|string|max:255|unique:menu_variants,variant_name,' . $id,
-                'price' => 'required|numeric|min:0',
+                'price' => 'nullable|numeric|min:0',
                 'compare_at_price' => 'nullable|numeric|min:0',
                 'track_inventory_enabled' => 'required|boolean',
                 // 'variant_img' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',

@@ -113,12 +113,6 @@ class MenuManagementListController extends Controller
             'name' => $validated['name'],
         ]);
 
-        // Sync relationships (this updates pivot tables)
-        $menuList->menuItems()->sync($validated['menu_item_ids']);
-        $menuList->outlets()->sync($validated['outlet_ids']);
-
-        $menuList->load(['menuItems', 'outlets']);
-
         return response()->json([
             'status' => 200,
             'message' => 'Menu List updated successfully with menu items and outlets',

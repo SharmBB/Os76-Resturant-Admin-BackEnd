@@ -17,8 +17,8 @@ class MenuManagementListController extends Controller
     public function index()
     {
         try {
-            // GET all menu lists with items and outlets
-            $menuList = MenuManagementList::with(['menuItems', 'outlets'])->get();
+            // GET all menu lists with items
+            $menuList = MenuManagementList::with(['menuItems'])->get();
              
             return response()->json([
                 'status' => 200,
@@ -46,10 +46,6 @@ class MenuManagementListController extends Controller
         try {
              $validated = $request->validate([
                 'name' => 'required|string|max:255',
-                'menu_item_ids' => 'required|array',
-                'menu_item_ids.*' => 'exists:menu_items,id',
-                'outlet_ids' => 'required|array',
-                'outlet_ids.*' => 'exists:outlets,id',
             ]);
 
             // Create new Menu Management List
@@ -57,17 +53,12 @@ class MenuManagementListController extends Controller
                 'name' => $validated['name'],
             ]);
 
-            // Saves the relationship in the pivot table (menu_list_menu_items table)
-            $menuList->menuItems()->attach($validated['menu_item_ids']);
-            // Saves the relationship in the pivot table (menu_list_outlets table)
-            $menuList->outlets()->attach($validated['outlet_ids']);
-
             // loads the related data immediately after creation
-            $menuList->load(['menuItems', 'outlets']);
+            $menuList->load(['menuItems']);
 
             return response()->json([
                 'status' => 201,
-                'message' => 'Menu List created and menu items and outlets assigned successfully',
+                'message' => 'Menu List created successfully',
                 'data' => $menuList,
             ], Response::HTTP_CREATED);
 
@@ -85,7 +76,7 @@ class MenuManagementListController extends Controller
     public function show(string $id)
     {
         try {
-            $menuList = MenuManagementList::with(['menuItems','outlets'])->findOrFail($id);
+            $menuList = MenuManagementList::with(['menuItems'])->findOrFail($id);
 
             return response()->json([
                 'status' => 200,
@@ -113,10 +104,6 @@ class MenuManagementListController extends Controller
         try {
         $validated = $request->validate([
             'name' => 'required|string|max:255',
-            'menu_item_ids' => 'required|array',
-            'menu_item_ids.*' => 'exists:menu_items,id',
-            'outlet_ids' => 'required|array',
-            'outlet_ids.*' => 'exists:outlets,id',
         ]);
 
         // Find the Menu Management List
@@ -126,15 +113,11 @@ class MenuManagementListController extends Controller
             'name' => $validated['name'],
         ]);
 
-        // Sync relationships (this updates pivot tables)
-        $menuList->menuItems()->sync($validated['menu_item_ids']);
-        $menuList->outlets()->sync($validated['outlet_ids']);
-
-        $menuList->load(['menuItems', 'outlets']);
+        $menuList->load(['menuItems']);
 
         return response()->json([
             'status' => 200,
-            'message' => 'Menu List updated successfully with menu items and outlets',
+            'message' => 'Menu List updated successfully',
             'data' => $menuList,
         ], Response::HTTP_OK);
 

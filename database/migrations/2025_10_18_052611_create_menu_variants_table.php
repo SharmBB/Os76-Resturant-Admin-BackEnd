@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('menu_item_id'); 
             $table->string('variant_name');
-            $table->decimal('price', 8, 2);
+            $table->decimal('price', 8, 2)->nullable();
             $table->decimal('compare_at_price', 8, 2)->nullable();
             $table->boolean('track_inventory_enabled')->default(false); 
             $table->timestamps();

@@ -21,7 +21,7 @@ return new class extends Migration
             $table->unsignedBigInteger('subcategory_id')->nullable();
             $table->unsignedBigInteger('menu_list_id')->nullable(); 
 
-            $table->decimal('price', 8, 2);
+            $table->decimal('price', 8, 2)->nullable();
             $table->decimal('compare_at_price', 8, 2)->nullable();
             $table->enum('type', ['Veg', 'Non_veg']);
             $table->string('product_code')->nullable();

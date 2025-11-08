@@ -46,10 +46,6 @@ class MenuManagementListController extends Controller
         try {
              $validated = $request->validate([
                 'name' => 'required|string|max:255',
-                'menu_item_ids' => 'required|array',
-                'menu_item_ids.*' => 'exists:menu_items,id',
-                'outlet_ids' => 'required|array',
-                'outlet_ids.*' => 'exists:outlets,id',
             ]);
 
             // Create new Menu Management List
@@ -57,17 +53,12 @@ class MenuManagementListController extends Controller
                 'name' => $validated['name'],
             ]);
 
-            // Saves the relationship in the pivot table (menu_list_menu_items table)
-            $menuList->menuItems()->attach($validated['menu_item_ids']);
-            // Saves the relationship in the pivot table (menu_list_outlets table)
-            $menuList->outlets()->attach($validated['outlet_ids']);
-
             // loads the related data immediately after creation
             $menuList->load(['menuItems', 'outlets']);
 
             return response()->json([
                 'status' => 201,
-                'message' => 'Menu List created and menu items and outlets assigned successfully',
+                'message' => 'Menu List created successfully',
                 'data' => $menuList,
             ], Response::HTTP_CREATED);
 
@@ -113,10 +104,6 @@ class MenuManagementListController extends Controller
         try {
         $validated = $request->validate([
             'name' => 'required|string|max:255',
-            'menu_item_ids' => 'required|array',
-            'menu_item_ids.*' => 'exists:menu_items,id',
-            'outlet_ids' => 'required|array',
-            'outlet_ids.*' => 'exists:outlets,id',
         ]);
 
         // Find the Menu Management List

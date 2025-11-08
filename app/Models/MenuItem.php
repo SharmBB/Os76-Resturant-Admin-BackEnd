@@ -32,7 +32,7 @@ class MenuItem extends Model
 
     public function menuLists()
     {
-        return $this->belongsToMany(MenuManagementList::class, 'menu_list_item');
+        return $this->belongsToMany(MenuManagementList::class, 'menu_list_menu_items');
     }
 
     public function category()
